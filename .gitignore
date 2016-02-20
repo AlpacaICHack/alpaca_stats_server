@@ -1,6 +1,12 @@
 *.idea
 *.codekit
-
+*.pyc
+bin/*
+include/*
+lib/*
+pip-selfcheck.json
+.Python
+.DS_Store
 
 .idea/*
 .idea/.*
