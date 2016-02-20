@@ -92,3 +92,8 @@ body {
     font-weight: 500;
     transform: translate(65%, 0%);
 }
+
+.bdypadding {
+    padding: 15px;
+}
+
