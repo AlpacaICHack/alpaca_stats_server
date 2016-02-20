@@ -7,12 +7,19 @@ from ..models import Event, Track, Movement
 def events(request):
     event_id_response = request.GET.get('id')
     response_data = []
-    if event_id_response == "":
+    events = []
+
+    if not event_id_response is None:
         event_id = int(event_id_response)
-        Event.objects.get(event_id)
+        try:
+            events.append(Event.objects.get(pk=event_id))
+        except Event.DoesNotExist:
+            pass
+
     else:
         events = Event.objects.all()
-        for e in events:
+
+    for e in events:
             eventdata = {}
             eventdata['id'] = e.pk
             eventdata['name'] = e.name
