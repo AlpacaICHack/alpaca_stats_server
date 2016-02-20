@@ -4,4 +4,4 @@ from django.shortcuts import render
 # Create your views here.
 
 def home(request):
-    return render(request, 'alpacastats/home.html')
+    return render(request, 'alpacastats/pools.html')

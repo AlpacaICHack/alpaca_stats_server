@@ -80,3 +80,20 @@ body {
     font-size: 16px;
     font-weight: 500;
 }
+
+.sumting {
+    transform: translate(80%, 40%);
+}
+
+.audiotext {
+    color: white;
+    font-family: 'Raleway', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    transform: translate(65%, 0%);
+}
+
+.bdypadding {
+    padding: 15px;
+}
+
