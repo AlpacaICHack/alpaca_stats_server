@@ -17,8 +17,6 @@ class Track(models.Model):
     name = models.CharField(max_length=200)
     artist = models.CharField(max_length=200)
     art = models.URLField()
-    upvotes = models.IntegerField()
-    downvotes = models.IntegerField()
 
     event = models.ForeignKey(Event)
 
@@ -45,3 +43,19 @@ class Movement(models.Model):
 
     def __unicode__(self):
         return unicode(self.value)
+
+class Vote(models.Model):
+    user = models.CharField(max_length=16)
+    track = models.ForeignKey(Track)
+
+    UPVOTE = 'U'
+    DOWNVOTE = 'D'
+    VOTE_TYPES = (
+        (UPVOTE, 'Upvote'),
+        (DOWNVOTE, 'Downvote')
+    )
+
+    vote = models.CharField(max_length=1, choices=VOTE_TYPES)
+
+    def __unicode__(self):
+        return unicode(self.user)

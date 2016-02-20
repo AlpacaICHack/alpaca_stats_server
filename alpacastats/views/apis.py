@@ -1,6 +1,6 @@
 import json
 from django.http import HttpResponse
-from ..models import Event, Track, Movement
+from ..models import Event, Track, Movement, Vote
 
 
 def events(request):
@@ -19,13 +19,13 @@ def events(request):
         events = Event.objects.all()
 
     for e in events:
-            eventdata = {}
-            eventdata['id'] = e.pk
-            eventdata['name'] = e.name
-            eventdata['description'] = e.description
-            eventdata['date'] = e.date.strftime("%a, %d %b %Y")
-            eventdata['picture'] = e.picture
-            response_data.append(eventdata)
+        eventdata = {}
+        eventdata['id'] = e.pk
+        eventdata['name'] = e.name
+        eventdata['description'] = e.description
+        eventdata['date'] = e.date.strftime("%a, %d %b %Y")
+        eventdata['picture'] = e.picture
+        response_data.append(eventdata)
 
     out = json.dumps(response_data)
 
@@ -97,7 +97,6 @@ def current_track(request):
         return HttpResponse(track_out, content_type=json)
 
 
-
 def vote_track(request):
     track_id_response = request.GET.get('track')
     tracks_data = []
@@ -113,18 +112,24 @@ def vote_track(request):
             return HttpResponse("Track doesn't exist", content_type=json)
 
         track = Track.objects.get(pk=track_id)
+        user = request.GET.get('user')
 
-        track_vote_response = request.GET.get('up')
+        if user is not None:
+            v = Vote()
+            v.user = str(user)
+            v.track = track
+            v.save()
+            vote_result = request.GET.get('up')
+            if vote_result is not None:
+                if vote_result == 'true':
+                    v.vote = 'U'
+                else:
+                    v.vote = 'D'
 
-        if track_vote_response == 'true':
-            track.upvotes += 1
+                return HttpResponse(json.dumps([v.user, v.track.name]), content_type=json)
+            return HttpResponse("No vote type specified!", content_type=json)
         else:
-            track.downvotes += 1
-
-        track.save()
-
-        return HttpResponse(json.dumps([track.name, track.upvotes, track.downvotes]), content_type=json)
-
+            return HttpResponse("No user ID specified!", content_type=json)
 
 
 def movement(request):
@@ -142,7 +147,6 @@ def movement(request):
 
         active_track = Track.objects.filter(event__pk=event.pk).filter(active_track=True)[0]
 
-
         if request.GET.get('value') is not None:
             m = Movement()
             m.value = request.GET.get('value')
@@ -153,10 +157,51 @@ def movement(request):
             return HttpResponse("Please supply a movement value!", content_type=json)
 
 
-
-
 def vote(request):
-    pass
+    event_id_response = request.GET.get('event')
+
+    if event_id_response is None:
+        return HttpResponse("Please supply an event ID!", content_type=json)
+    else:
+        event_id = int(event_id_response)
+
+        try:
+            event = Event.objects.get(pk=event_id)
+        except Event.DoesNotExist:
+            return HttpResponse("Event doesn't exist", content_type=json)
+
+        t = Track.objects.filter(event__pk=event.pk).filter(active_track=True)[0]
+
+        user_response = request.GET.get('user')
+
+        if user_response is not None:
+            trackvotes = Vote.objects.filter(track__pk=t.pk)
+            hasvote = False
+            thisvote = Vote()
+            user = str(user_response)
+            for v in trackvotes:
+                if v.user == user:
+                    hasvote = True
+                    thisvote = v
+
+            if not hasvote:
+                thisvote.user = str(user)
+                thisvote.track = t
+
+            vote_result = request.GET.get('up')
+            if vote_result is not None:
+                if vote_result == 'true':
+                    thisvote.vote = 'U'
+                else:
+                    thisvote.vote = 'D'
+
+                thisvote.save()
+                return HttpResponse(json.dumps([thisvote.user, thisvote.track.name]), content_type=json)
+            return HttpResponse("No vote type specified!", content_type=json)
+        else:
+            return HttpResponse("No user ID specified!", content_type=json)
+
+
 
 
 def add_request(request):
