@@ -6,9 +6,11 @@ from django.db import models
 class Event(models.Model):
     name = models.CharField(max_length=200)
     description = models.CharField(max_length=600)
-    start_date = models.DateField('start date')
-    end_date = models.DateField('end date')
+    date = models.DateField('date')
     picture = models.URLField()
+
+    def __unicode__(self):
+        return unicode(self.name)
 
 
 class Track(models.Model):
@@ -17,6 +19,10 @@ class Track(models.Model):
     art = models.URLField()
     upvotes = models.IntegerField()
     downvotes = models.IntegerField()
+
+    event = models.ForeignKey(Event)
+
+    active_track = models.BooleanField()
 
     timestamp = models.DateTimeField(auto_now=True)
 
@@ -29,7 +35,13 @@ class Track(models.Model):
 
     track_type = models.CharField(max_length=2, choices=TRACK_TYPES)
 
+    def __unicode__(self):
+        return unicode(self.name)
+
 
 class Movement(models.Model):
     value = models.IntegerField()
     track = models.ForeignKey(Track)
+
+    def __unicode__(self):
+        return unicode(self.value)
