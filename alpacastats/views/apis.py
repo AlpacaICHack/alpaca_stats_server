@@ -121,7 +121,9 @@ def vote_track(request):
         else:
             track.downvotes += 1
 
-        return HttpResponse("All good!", content_type=json)
+        track.save()
+
+        return HttpResponse(json.dumps([track.name, track.upvotes, track.downvotes]), content_type=json)
 
 
 
