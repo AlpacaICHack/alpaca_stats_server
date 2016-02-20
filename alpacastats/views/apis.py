@@ -128,7 +128,31 @@ def vote_track(request):
 
 
 def movement(request):
-    pass
+    event_id_response = request.GET.get('event')
+
+    if event_id_response is None:
+        return HttpResponse("Please supply an event ID!", content_type=json)
+    else:
+        event_id = int(event_id_response)
+
+        try:
+            event = Event.objects.get(pk=event_id)
+        except Event.DoesNotExist:
+            return HttpResponse("Event doesn't exist", content_type=json)
+
+        active_track = Track.objects.filter(event__pk=event.pk).filter(active_track=True)[0]
+
+
+        if request.GET.get('value') is not None:
+            m = Movement()
+            m.value = request.GET.get('value')
+            m.track = active_track
+            m.save()
+            return HttpResponse(json.dumps([m.value, m.track.name]), content_type=json)
+        else:
+            return HttpResponse("Please supply a movement value!", content_type=json)
+
+
 
 
 def vote(request):
