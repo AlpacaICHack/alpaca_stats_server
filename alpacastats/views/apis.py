@@ -1,6 +1,5 @@
 import json
 from django.http import HttpResponse
-from django.shortcuts import render
 from ..models import Event, Track, Movement
 
 
@@ -51,6 +50,7 @@ def pool(request):
 
         for t in tracks:
             track = {}
+            track['id'] = t.pk
             track['name'] = t.name
             track['artist'] = t.artist
             track['artwork'] = t.art
@@ -83,6 +83,7 @@ def current_track(request):
         t = Track.objects.filter(event__pk=event.pk).filter(active_track=True)[0]
 
         track = {}
+        track['id'] = t.pk
         track['name'] = t.name
         track['artist'] = t.artist
         track['artwork'] = t.art
@@ -98,11 +99,30 @@ def current_track(request):
 
 
 def vote_track(request):
-    pass
+    track_id_response = request.GET.get('track')
+    tracks_data = []
 
+    if track_id_response is None:
+        return HttpResponse("Please supply a track ID!", content_type=json)
+    else:
+        track_id = int(track_id_response)
 
-def vote_request(request):
-    pass
+        try:
+            track = Track.objects.get(pk=track_id)
+        except Event.DoesNotExist:
+            return HttpResponse("Track doesn't exist", content_type=json)
+
+        track = Track.objects.get(pk=track_id)
+
+        track_vote_response = request.GET.get('up')
+
+        if track_vote_response == 'true':
+            track.upvotes += 1
+        else:
+            track.downvotes += 1
+
+        return HttpResponse("All good!", content_type=json)
+
 
 
 def movement(request):
