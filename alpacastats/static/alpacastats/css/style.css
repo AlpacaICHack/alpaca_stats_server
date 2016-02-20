@@ -1,0 +1,82 @@
+body {
+    background-color: #fdfffc;
+}
+
+.get-started {
+    padding: 0px 20px 0px 20px;
+    background-color: #ff9f1c;
+}
+
+.get-started:hover {
+    cursor: pointer;
+    background-color: #ffb635;
+}
+
+.get-started p {
+    color: white;
+    font-family: 'Raleway', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.logo-type {
+    font-family: 'Raleway', sans-serif;
+}
+
+.event .panel-heading {
+    font-family: 'Raleway', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.event .panel-body img {
+    margin: 12px;
+}
+
+.panel-text {
+    padding: 10px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.this {
+    background-color: #ff9f1c;
+    height: 152px;
+    cursor: pointer;
+}
+
+.this span {
+    color: #fdfffc;
+    font-size: 4em;
+    transform: translate(100%, 80%);
+}
+
+.current-song {
+    padding: 10px;
+    background-color: #011627;
+}
+
+.current-song span {
+    color: white;
+    font-size: 1.8em;
+    transform: translate(40%, 25%);
+}
+
+#hey {
+    padding-top: 7px;
+    color: white;
+    font-family: 'Raleway', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+#hey span {
+    padding-top: 7px;
+    color: white;
+    font-family: 'Raleway', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+}
