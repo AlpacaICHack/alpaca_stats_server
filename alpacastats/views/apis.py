@@ -1,4 +1,4 @@
-import json
+import urllib, json
 from django.http import HttpResponse
 from ..models import Event, Track, Movement, Vote
 
@@ -202,7 +202,43 @@ def vote(request):
             return HttpResponse("No user ID specified!", content_type=json)
 
 
-
-
 def add_request(request):
-    pass
+    event_id_response = request.GET.get('event')
+    track_name_response = request.GET.get('track')
+    artist_name_response = request.GET.get('artist')
+
+    if event_id_response is not None and track_name_response is not None and artist_name_response is not None:
+        event_id = int(event_id_response)
+        track_name = str(track_name_response)
+        artist_name = str(artist_name_response)
+
+        search_track = ""
+        first = True
+        for s in str.split(track_name):
+            if first:
+                search_track += s
+                first = False
+            else:
+                search_track += "+"
+                search_track += s
+
+        search_artist = ""
+        first = True
+        for s in str.split(artist_name):
+            if first:
+                search_artist += s
+                first = False
+            else:
+                search_artist += "+"
+                search_artist += s
+
+        url = "http://ws.audioscrobbler.com/2.0/?method=track.search&track=" + search_track + "&artist=" + search_artist + "&api_key=57ee3318536b23ee81d6b27e36997cde&format=json"
+        response = urllib.urlopen(url)
+        data = json.loads(response.read())
+
+        print data
+
+
+
+
+
