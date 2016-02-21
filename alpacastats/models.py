@@ -41,6 +41,8 @@ class Movement(models.Model):
     value = models.IntegerField()
     track = models.ForeignKey(Track)
 
+    timestamp = models.DateTimeField(auto_now=True)
+
     def __unicode__(self):
         return unicode(self.value)
 
@@ -56,6 +58,8 @@ class Vote(models.Model):
     )
 
     vote = models.CharField(max_length=1, choices=VOTE_TYPES)
+
+    timestamp = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
         return unicode(self.user)
