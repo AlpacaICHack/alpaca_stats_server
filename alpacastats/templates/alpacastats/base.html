@@ -18,18 +18,7 @@
     <link href="{% static 'alpacastats/css/style.css' %}" rel="stylesheet">
 </head>
 <body>
-<header>
-    <nav class="navbar navbar-inverse navbar-static-top">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <p class="logo-type">Alpaca</p>
-            </a>
-            <a class="navbar-right get-started">
-                <p class="navbar-text">Get Started</p>
-            </a>
-        </div>
-    </nav>
-</header>
+{% include 'alpacastats/navbar.html' %}
 <!-- ONE EVENT -->
 {% block content %}
 {% endblock %}
@@ -38,5 +27,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <!-- Everything else below -->
 <script src="{% static 'alpacastats/js/bootstrap.min.js' %}"></script>
+
+{% block footer_scripts %}
+{% endblock %}
+
 </body>
 </html>

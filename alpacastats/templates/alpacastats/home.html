@@ -3,38 +3,42 @@
 {% load staticfiles %}
 
 {% block content %}
+{% if events %}
+{% for event, track in events %}
 <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-8">
         <div class="panel panel-primary event">
-            <div class="panel-heading">O2 Academy Brixton - Netsky</div>
+            <div class="panel-heading">{{ event.name }}</div>
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-2">
-                        <img src="{% static 'alpacastats/images/o2.jpg' %}" alt="..." class="img-rounded img-responsive">
+                        <img src="{{ event.picture }}" alt="..." class="img-rounded img-responsive">
                     </div>
                     <div class="col-md-8">
-                        <p class="panel-text">Squashy armchairs dirt on your nose brass scales crush the Sopophorous bean with flat
-                            side of silver dagger, releases juice better than cutting. Full moon Whomping Willow
-                            three turns should do it lemon drops. Locomotor trunks owl treats that will be 50
-                            points, Mr. Potter. Witch Weekly, he will rise again and he will come for us, headmaster
-                            Erumpent horn. Fenrir Grayback horseless carriages ‘zis is a chance many would die for!</p>
+                        <p class="panel-text">{{ event.description }}</p>
                     </div>
                     <div class="col-md-2 this">
                         <span class="glyphicon glyphicon-circle-arrow-right"></span>
                     </div>
                 </div>
+                {% if track %}
                 <div class="row current-song">
                     <div class="col-md-1">
                         <span class="glyphicon glyphicon-play-circle"></span>
                     </div>
                     <div class="col-md-9" id="hey">
-                        <p><span>Currently being played :</span> Netsky - Ready for Love (ft. Sia)</p>
+                        <p><span>Currently being played :</span> {{ track.name }} - {{ track.artist }}</p>
                     </div>
                 </div>
+                {% endif %}
             </div>
         </div>
         <div class="col-md-2"></div>
     </div>
 </div>
+{% endfor %}
+{% else %}
+<h1>No Events yet!</h1>
+{% endif %}
 {% endblock %}
