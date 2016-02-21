@@ -1,0 +1,63 @@
+{% extends 'alpacastats/base.html' %}
+
+{% load staticfiles %}
+
+{% block navbar %}
+
+{% include 'alpacastats/navbar.html' %}
+
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-2">
+    </div>
+    <div class="col-md-8">
+        <div class="panel panel-primary event">
+            <div class="panel-heading">
+                    Create new event
+            </div>
+            <div class="panel-body bdypadding">
+                <form action="{% url 'alpacastats:new_event' %}" method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-4">
+                            Event title:
+                        </div>
+                        <div class="col-md-3">
+                            Description:
+                        </div>
+                        <div class="col-md-3">
+                            Date:
+                        </div>
+                        <div class="col-md-2">
+                            Picture URL:
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <input id="event_title" type="text" class="form-control" name="event_title" value="{{ current_title }}" placeholder="Title">
+                        </div>
+                        <div class="col-md-3">
+                            <input id="description" type="text" class="form-control" name="description" value="{{ current_desc }}" placeholder="Description">
+                        </div>
+                        <div class="col-md-3">
+                            <input id="day" type="date" class="form-control" name="day" value="{{ current_day }}" placeholder="DD">
+                        </div>
+                        <div class="col-md-2">
+                            <input id="image_url" type="text" class="form-control" name="image_url" value="{{ current_img_url }}" placeholder="URL">
+                        </div>
+                    </div>
+                    <div class="row"><br>
+                        <div class="col-md-5"></div>
+                        <div class="col-md-2">
+                            <button class="btn btn-primary btn-block" type="submit">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
