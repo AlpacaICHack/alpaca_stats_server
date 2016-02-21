@@ -42,6 +42,6 @@ def statistics(request, event_id):
     else:
         currenttrack = None
 
-    context = {'currenttrack': currenttrack}
+    context = {'currenttrack': currenttrack, 'event': event}
 
     return render(request, 'alpacastats/stats.html', context)
