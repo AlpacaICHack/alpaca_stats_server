@@ -9,13 +9,11 @@
             <a class="navbar-brand" href="#">
                 <p class="logo-type">Alpaca</p>
             </a>
-            {% if currenttrack %}
-            <p class="navbar-text navbar-left audiotext">{{ currenttrack.name }} - {{ currenttrack.artist }}  |  16 <span class="glyphicon glyphicon-arrow-up"></span> and 10 <span class="glyphicon glyphicon-arrow-down"></span></p>
-            {% endif %}
-            <a class="navbar-right get-started">
+
+            <a class="navbar-right get-started" href="{% url 'alpacastats:statistics' event.id %}">
                 <p class="navbar-text">Current</p>
             </a>
-            <a class="navbar-right get-started">
+            <a class="navbar-right get-started" href="{% url 'alpacastats:pool' event.id %}">
                 <p class="navbar-text">Pool</p>
             </a>
         </div>
@@ -25,6 +23,19 @@
 
 
 {% block content %}
+
+{% if currenttrack %}
+<div class="row">
+    <div class="col-md-2">
+    </div>
+    <div class="col-md-8">
+        <div class="alert alert-warning" role="alert">{{ currenttrack.name }} by {{ currenttrack.artist }} is currently playing
+            </div>
+    </div>
+    <div class="col-md-2"></div>
+</div>
+{% endif %}
+
 <div class="row">
     <div class="col-md-2">
     </div>
