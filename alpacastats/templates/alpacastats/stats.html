@@ -58,7 +58,7 @@
         <div class="panel panel-primary event">
             <div class="panel-heading">Current song being played</div>
             <div class="panel-body">
-                <table id="table"></table>
+                <table id="pool" class="table table-hover"></table>
             </div>
         </div>
     </div>
@@ -73,63 +73,114 @@
 <!-- Everything else below -->
 
 {% block footer_scripts %}
+<script>
+    var dynamicTable = (function() {
 
-<script>
-    $(function () {
-        $('#stats').highcharts({
-            chart: {
-                type: 'area'
+    var _tableId, _table,
+        _fields, _headers,
+        _defaultText;
+
+    /** Builds the row with columns from the specified names.
+     *  If the item parameter is specified, the memebers of the names array will be used as property names of the item; otherwise they will be directly parsed as text.
+     */
+    function _buildRowColumns(names, item) {
+        var row = '<tr>';
+        if (names && names.length > 0)
+        {
+            $.each(names, function(index, name) {
+                var c = item ? item[name+''] : name;
+                row += '<td>' + c + '</td>';
+            });
+        }
+        row += '<tr>';
+        return row;
+    }
+
+    /** Builds and sets the headers of the table. */
+    function _setHeaders() {
+        // if no headers specified, we will use the fields as headers.
+        _headers = (_headers == null || _headers.length < 1) ? _fields : _headers;
+        var h = _buildRowColumns(_headers);
+        if (_table.children('thead').length < 1) _table.prepend('<thead></thead>');
+        _table.children('thead').html(h);
+    }
+
+    function _setNoItemsInfo() {
+        if (_table.length < 1) return; //not configured.
+        var colspan = _headers != null && _headers.length > 0 ?
+            'colspan="' + _headers.length + '"' : '';
+        var content = '<tr class="no-items"><td ' + colspan + ' style="text-align:center">' +
+            _defaultText + '</td></tr>';
+        if (_table.children('tbody').length > 0)
+            _table.children('tbody').html(content);
+        else _table.append('<tbody>' + content + '</tbody>');
+    }
+
+    function _removeNoItemsInfo() {
+        var c = _table.children('tbody').children('tr');
+        if (c.length == 1 && c.hasClass('no-items')) _table.children('tbody').empty();
+    }
+
+    return {
+        /** Configres the dynamic table. */
+        config: function(tableId, fields, headers, defaultText) {
+            _tableId = tableId;
+            _table = $('#' + tableId);
+            _fields = fields || null;
+            _headers = headers || null;
+            _defaultText = defaultText || 'No items to list...';
+            _setHeaders();
+            _setNoItemsInfo();
+            return this;
+        },
+        /** Loads the specified data to the table body. */
+        load: function(data, append) {
+            if (_table.length < 1) return; //not configured.
+            _setHeaders();
+            _removeNoItemsInfo();
+            if (data && data.length > 0) {
+                var rows = '';
+                $.each(data, function(index, item) {
+                    rows += _buildRowColumns(_fields, item);
+                });
+                var mthd = append ? 'append' : 'html';
+                _table.children('tbody')[mthd](rows);
+            }
+            else {
+                _setNoItemsInfo();
+            }
+            return this;
+        },
+        /** Clears the table body. */
+        clear: function() {
+            _setNoItemsInfo();
+            return this;
+        }
+    };
+}());
+
+    var dt = dynamicTable.config('pool',
+                                 ['name', 'artist', 'up', 'down', 'play'],
+                                 ['Name', 'Artist', 'Likes', 'Dislikes', 'Play Track'], //set to null for field names instead of custom header names
+                                 'There are no songs in the pool - try adding some!');
+    function requestPoolData() {
+        $.ajax({
+            url: '{% url 'alpacastats:tracks_data' %}?event={{ event.id }}',
+            success: function (response) {
+
+                dt.load(response.tracks)
+
+                // call it again after two seconds
+                setTimeout(requestPoolData, 2000);
             },
-            title: {
-                text: ''
-            },
-            xAxis: {
-                categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']
-            },
-            credits: {
-                enabled: false
-            },
-            series: [{
-                name: 'Like',
-                data: [5, 3, 4, 7, 2]
-            }, {
-                name: 'Dislike',
-                data: [-2, -1, -3, -2, -1]
-            }]
+            cache: false
         });
-    });
+    }
+
+    requestPoolData();
+
 </script>
-<script>
-    $('#table').bootstrapTable({
-        columns: [{
-            field: 'id',
-            title: 'Time'
-        }, {
-            field: 'name',
-            title: 'Song Name'
-        }, {
-            field: 'price',
-            title: 'Upvotes/Downvotes'
-        }],
-        data: [{
-            id: 1,
-            name: 'Badzu - Let\'s Have a Party',
-            price: '$1'
-        }, {
-            id: 2,
-            name: 'Item 2',
-            price: '$2'
-        }, {
-            id: 3,
-            name: 'Item 2',
-            price: '$2'
-        }, {
-            id: 4,
-            name: 'Item 2',
-            price: '$2'
-        }]
-    });
-</script>
+
 <script>
     $(function () {
         $(document).ready(function () {
@@ -172,6 +223,9 @@
                 },
                 title: {
                     text: ' '
+                },
+                credits: {
+                    enabled: false
                 },
                 xAxis: {
                     type: 'datetime',
@@ -274,6 +328,9 @@
                 },
                 title: {
                     text: ' '
+                },
+                credits: {
+                    enabled: false
                 },
                 xAxis: {
                     type: 'datetime',
