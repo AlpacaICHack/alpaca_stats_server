@@ -20,7 +20,17 @@ def home(request):
 
 
 def pool(request, event_id):
-    return render(request, 'alpacastats/pools.html')
+    event = Event.objects.get(pk=event_id)
+
+    context = {'event': event}
+
+
+    
+
+
+
+
+    return render(request, 'alpacastats/pools.html', context)
 
 
 def statistics(request, event_id):

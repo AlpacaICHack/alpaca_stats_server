@@ -27,21 +27,33 @@
             <div class="panel panel-primary event">
                 <div class="panel-heading">Search through pool</div>
                 <div class="panel-body bdypadding">
+                    <form action="{% url 'alpacastats:pool' event.id %}" method="post">
+                        {% csrf_token %}
+                    <div class="row">
+                            <div class="col-md-5">
+                                Song name:
+                            </div>
+                            <div class="col-md-5">
+                                Artist name:
+                            </div>
+
+                    </div>
                     <div class="row">
                         <div class="col-md-5">
-                            <input type="text" class="form-control" placeholder="Search Artists">
+                            <input id="song_name" type="text" class="form-control" name="song_name" value="{{ current_song }}" placeholder="Search Song Names">
                         </div>
                         <div class="col-md-5">
-                            <input type="text" class="form-control" placeholder="Search Song Names">
+                            <input id="artist_name" type="text" class="form-control" name="artist_name" value="{{ current_artist }}" placeholder="Search Artist Names">
                         </div>
                         <div class="col-md-2">
-                            <button class="btn btn-primary btn-block" type="submit">Search  <span class="glyphicon glyphicon-search"></span></button>
+                            <button class="btn btn-primary btn-block" type="submit">Search  <span class="glyphicon glyphicon-search" value="OK"></span></button>
                         </div>
                     </div>
+                    </form>
                 </div>
             </div>
         </div>
-        <div class="col-md-2"></div>
+    </div>
     </div>
     <!-- END TWO EVENT -->
     <!-- TWO EVENT -->
