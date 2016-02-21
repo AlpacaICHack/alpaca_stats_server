@@ -323,6 +323,8 @@ def tracks_data(request):
         for t, v in sortedtracks:
             if t.played:
                 play = '<button class="btn btn-warning btn-block">Played!</button>'
+            elif t.active_track:
+                play = '<button class="btn btn-danger btn-block">Currently playing</button>'
             else:
                 play = '<a href="' + reverse('alpacastats:statistics', args=[event.id]) + '?track_id=' + str(t.id) + '"><button class="btn btn-primary btn-block">Play Track <span class="glyphicon glyphicon-play"></button></a>'
 
