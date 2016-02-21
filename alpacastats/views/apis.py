@@ -236,7 +236,23 @@ def add_request(request):
         response = urllib.urlopen(url)
         data = json.loads(response.read())
 
-        print data
+        print url
+
+        art_url = data['results']['trackmatches']['track'][-1]['image'][3]['#text']
+        name = data['results']['trackmatches']['track'][0]['name']
+        artist = data['results']['trackmatches']['track'][0]['artist']
+
+        track = Track()
+        track.name = name
+        track.artist = artist
+        track.art = art_url
+        track.track_type = 'R'
+        track.active_track = False
+        track.event = Event.objects.get(pk=event_id)
+
+        track.save()
+
+        return HttpResponse(json.dumps([track.name, track.artist, track.art]), content_type=json)
 
 
 
