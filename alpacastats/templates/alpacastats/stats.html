@@ -209,7 +209,7 @@
                                     success: function(response) {
                                         var x = (new Date()).getTime(), // current time
                                         likes = response.upvotes;
-                                        dislikes = response.downvotes;
+                                        dislikes = 0 - response.downvotes;
                                         serieslikes.addPoint([x, likes], true, true);
                                         seriesdislikes.addPoint([x, dislikes], true, true);
 
