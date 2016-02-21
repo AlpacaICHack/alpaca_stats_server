@@ -254,6 +254,7 @@ def add_request(request):
         track.track_type = 'R'
         track.active_track = False
         track.event = Event.objects.get(pk=event_id)
+        track.played = False
 
         track.save()
 
