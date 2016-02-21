@@ -73,6 +73,7 @@ def pool(request, event_id):
             track.track_type = 'DJ'
             track.active_track = False
             track.event = Event.objects.get(pk=event_id)
+            track.played = False
 
             track.save()
             return HttpResponseRedirect(reverse('alpacastats:pool', args=[event_id]))
