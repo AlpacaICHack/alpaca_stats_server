@@ -6,9 +6,7 @@
 <header>
     <nav class="navbar navbar-inverse navbar-static-top">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'alpacastats:index' %}">
-                <p class="logo-type">Alpaca</p>
-            </a>
+            <a class="navbar-brand" href="{% url 'alpacastats:index' %}" ><img src="{% static 'alpacastats/images/logo.png' %}" alt="alpaca" class="alpaca-logo" /></a>
 
             <a class="navbar-right get-started" href="{% url 'alpacastats:statistics' event.id %}">
                 <p class="navbar-text">Current</p>
