@@ -229,7 +229,7 @@
             var chart_tracks = $('#track-record').highcharts();
             chart_tracks.xAxis[0].setCategories(response.tracknames, false);
             chart_tracks.series[0].setData(response.upvotes, false);
-            chart_tracks.series[0].setData(response.downvotes, false);
+            chart_tracks.series[1].setData(response.downvotes, false);
             chart_tracks.redraw();
 
 
@@ -272,23 +272,18 @@
             enabled: false
         },
         credits: false,
-        plotOptions: {
-            series: {
-                stacking: 'normal'
-            }
-        },
         series: []
     });
 
     chart_subtopics.addSeries({
         name: 'Upvotes',
         data: [],
-        color: '#011627'
+        color: '#ff9f1c'
       });
     chart_subtopics.addSeries({
         name: 'Downvote',
         data: [],
-        color: '#ff9f1c'
+        color: '#011627'
       });
 
     $(function () {
