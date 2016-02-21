@@ -97,3 +97,9 @@ body {
     padding: 15px;
 }
 
+.alert-warning {
+    color: #56482E;
+    background-color: rgba(255, 182, 53, 0.47);
+    border-color: rgba(255, 182, 53, 0.27);
+}
+
