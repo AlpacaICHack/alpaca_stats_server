@@ -118,7 +118,6 @@ def vote_track(request):
             v = Vote()
             v.user = str(user)
             v.track = track
-            v.save()
             vote_result = request.GET.get('up')
             if vote_result is not None:
                 if vote_result == 'true':
@@ -126,6 +125,7 @@ def vote_track(request):
                 else:
                     v.vote = 'D'
 
+                v.save()
                 return HttpResponse(json.dumps([v.user, v.track.name]), content_type=json)
             return HttpResponse("No vote type specified!", content_type=json)
         else:
