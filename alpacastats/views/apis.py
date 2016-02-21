@@ -367,3 +367,29 @@ def scatter(request):
         scatterjson = json.dumps(scatterdata)
 
         return HttpResponse(scatterjson, content_type=json)
+
+def track_columns(request):
+    event_id_response = request.GET.get('event')
+
+    if event_id_response is not None:
+        event = Event.objects.get(pk=int(event_id_response))
+
+        alltracks = Track.objects.filter(event__pk=event.pk).filter(played=True)
+
+        if len(alltracks) > 0:
+            upvotes = []
+            downvotes = []
+            tracknames = []
+
+            for t in alltracks:
+                votes = Vote.objects.filter(track__pk=t.pk)
+                upvotes.append(votes.filter(vote='U').count())
+                downvotes.append(votes.filter(vote='D').count())
+                tracknames.append(t.name)
+
+            trackjson = json.dumps({'upvotes': upvotes, 'downvotes': downvotes, 'tracknames': tracknames})
+
+            return HttpResponse(trackjson, content_type=json)
+
+        else:
+            return HttpResponse([], content_type=json)

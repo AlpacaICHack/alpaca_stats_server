@@ -80,6 +80,19 @@
     <div class="col-md-2"></div>
     <div class="col-md-8">
         <div class="panel panel-primary event">
+            <div class="panel-heading">Track Record</div>
+            <div class="panel-body">
+                <div id="track-record" style="min-width: 310px; height: 300px; margin: 0 auto"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2"></div>
+</div>
+
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <div class="panel panel-primary event">
             <div class="panel-heading">Song Pool</div>
             <div class="panel-body">
                 <table id="pool" class="table table-hover"></table>
@@ -206,6 +219,77 @@
 </script>
 
 <script>
+
+    function requestColumnData() {
+    $.ajax({
+        url: '{% url 'alpacastats:track_columns' %}?event={{ event.id }}',
+        success: function(response) {
+
+
+            var chart_tracks = $('#track-record').highcharts();
+            chart_tracks.xAxis[0].setCategories(response.tracknames, false);
+            chart_tracks.series[0].setData(response.upvotes, false);
+            chart_tracks.series[0].setData(response.downvotes, false);
+            chart_tracks.redraw();
+
+
+
+            // call it again after two seconds
+            setTimeout(requestStatisticsData, 2000);
+        },
+        cache: false
+    });
+}
+
+    chart_subtopics = new Highcharts.Chart({
+      chart: {
+          renderTo: 'track-record',
+          type: 'column',
+          backgroundColor: '#fff'
+        },
+        title: false,
+        xAxis: {
+            categories: [],
+            crosshair: true
+        },
+        exporting: {
+            enabled: false
+        },
+        yAxis: {
+            min: 0,
+            title: false,
+            reversedStacks: false
+        },
+        tooltip: {
+          headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+          pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y}</b></td></tr>',
+          footerFormat: '</table>',
+          shared: true,
+          useHTML: true
+        },
+        legend: {
+            enabled: false
+        },
+        credits: false,
+        plotOptions: {
+            series: {
+                stacking: 'normal'
+            }
+        },
+        series: []
+    });
+
+    chart_subtopics.addSeries({
+        name: 'Upvotes',
+        data: [],
+        color: '#011627'
+      });
+    chart_subtopics.addSeries({
+        name: 'Downvote',
+        data: [],
+        color: '#ff9f1c'
+      });
 
     $(function () {
     $('#move-total').highcharts({
@@ -489,6 +573,8 @@
             });
         });
     });
+
+    requestColumnData();
 </script>
 
 {% endblock %}}

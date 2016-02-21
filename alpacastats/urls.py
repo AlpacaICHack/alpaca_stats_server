@@ -18,4 +18,5 @@ urlpatterns = [
     url(r'^api/votes_data$', apis.votes_data, name='votes_data'),
     url(r'^api/tracks_data$', apis.tracks_data, name='tracks_data'),
     url(r'^api/scatter$', apis.scatter, name='scatter'),
+    url(r'^api/track_columns$', apis.track_columns, name='track_columns'),
 ]
