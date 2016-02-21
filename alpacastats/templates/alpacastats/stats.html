@@ -26,12 +26,13 @@
 
 {% block content %}
 <div class="row">
-    <div class="col-md-2"></div>
+    <div class="col-md-2">
+    </div>
     <div class="col-md-8">
         <div class="panel panel-primary event">
-            <div class="panel-heading">Current song: {{ currenttrack.name }}</div>
+            <div class="panel-heading">Movement: {{ currenttrack.name }}</div>
             <div class="panel-body">
-                <div id="stats" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                <div id="movement" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
             </div>
         </div>
     </div>
@@ -39,13 +40,12 @@
 </div>
 
 <div class="row">
-    <div class="col-md-2">
-    </div>
+    <div class="col-md-2"></div>
     <div class="col-md-8">
         <div class="panel panel-primary event">
-            <div class="panel-heading">Current song: {{ currenttrack.name }}</div>
+            <div class="panel-heading">Votes: {{ currenttrack.name }}</div>
             <div class="panel-body">
-                <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                <div id="stats" style="min-width: 310px; height: 200px; margin: 0 auto"></div>
             </div>
         </div>
     </div>
@@ -73,8 +73,6 @@
 <!-- Everything else below -->
 
 {% block footer_scripts %}
-
-<script src="{% static 'alpacastats/js/audio.js' %}"></script>
 
 <script>
     $(function () {
@@ -133,6 +131,40 @@
     });
 </script>
 <script>
+    function requestStatisticsData() {
+    $.ajax({
+        url: {% url 'alpacastats:movement_data' %},
+        success: function(response) {
+
+            var chart_movement = $('#points').highcharts();
+
+
+
+            var latest_on = 'On: ';
+            for (i_latest = 0; i_latest < response.latest_point_subtopics.length; ++i_latest) {
+              latest_on += response.latest_point_subtopics[i_latest] + ', ';
+            }
+            $('#latest_on').html(latest_on);
+
+            if (response.running_order[0] !== undefined) {
+              running_html = '<h2>Next Points:</h2>';
+              var pos = 0;
+              response.running_order.forEach(function(point){
+                pos ++;
+                running_html += '<h3>' + pos + '. ' + point + '</h3>';
+              });
+              $('#next').html(running_html);
+            } else {
+              $('#next').html('');
+            }
+
+            // call it again after two seconds
+            setTimeout(requestStatisticsData, 2000);
+        },
+        cache: false
+    });
+}
+
     $(function () {
         $(document).ready(function () {
             Highcharts.setOptions({
@@ -141,7 +173,7 @@
                 }
             });
 
-            $('#container').highcharts({
+            $('#movement').highcharts({
                 chart: {
                     type: 'spline',
                     animation: Highcharts.svg, // don't animate in old IE
@@ -152,9 +184,18 @@
                             // set up the updating of the chart each second
                             var series = this.series[0];
                             setInterval(function () {
-                                var x = (new Date()).getTime(), // current time
-                                        y = Math.random();
-                                series.addPoint([x, y], true, true);
+
+                                $.ajax({
+                                    url: '{% url 'alpacastats:movement_data' %}?event={{ event.id }}',
+                                    success: function(response) {
+                                        var x = (new Date()).getTime(), // current time
+                                        y = response.movement;
+                                        series.addPoint([x, y], true, true);
+
+
+                                    },
+                                    cache: false
+                                });
                             }, 1000);
                         }
                     }
@@ -200,7 +241,7 @@
                         for (i = -19; i <= 0; i += 1) {
                             data.push({
                                 x: time + i * 1000,
-                                y: Math.random()
+                                y: 0
                             });
                         }
                         return data;
