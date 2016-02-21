@@ -19,9 +19,9 @@ def home(request):
     return render(request, 'alpacastats/home.html', context)
 
 
-def pool(request):
-    pass
+def pool(request, event_id):
+    return render(request, 'alpacastats/pools.html')
 
 
-def statistics(request):
-    pass
+def statistics(request, event_id):
+    return render(request, 'alpacastats/stats.html')

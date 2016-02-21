@@ -2,6 +2,10 @@
 
 {% load staticfiles %}
 
+{% block navbar %}
+{% include 'alpacastats/navbar.html' %}
+{% endblock %}
+
 {% block content %}
 {% if events %}
 {% for event, track in events %}
@@ -18,9 +22,11 @@
                     <div class="col-md-8">
                         <p class="panel-text">{{ event.description }}</p>
                     </div>
-                    <div class="col-md-2 this">
-                        <span class="glyphicon glyphicon-circle-arrow-right"></span>
-                    </div>
+                    <a href="{% url 'alpacastats:statistics' event.id %}">
+                        <div class="col-md-2 this">
+                            <span class="glyphicon glyphicon-circle-arrow-right"></span>
+                        </div>
+                    </a>
                 </div>
                 {% if track %}
                 <div class="row current-song">

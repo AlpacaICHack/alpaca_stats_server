@@ -1,22 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+{% load staticfiles %}
 
-    {% load staticfiles %}
-
-    <!-- The above 3 meta tags *must* come first in the head-->
-    <title>Alpaca</title>
-    <!-- Bootstrap -->
-    <link href="{% static 'alpacastats/css/bootstrap.css' %}" rel="stylesheet">
-    <!-- Other -->
-    <link href='https://fonts.googleapis.com/css?family=Raleway:400,500,700,600,800,900' rel='stylesheet' type='text/css'>
-    <link href="{% static 'alpacastats/css/style.css' %}" rel="stylesheet">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/bootstrap-table.min.css">
-</head>
-<body>
+{% block navbar %}
     <header>
         <nav class="navbar navbar-inverse navbar-static-top">
             <div class="container-fluid">
@@ -32,7 +16,9 @@
             </div>
         </nav>
     </header>
-    <!-- TWO EVENT -->
+{% endblock %}
+
+{% block content %}
     <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-8">
@@ -69,14 +55,10 @@
         </div>
         <div class="col-md-2"></div>
     </div>
-    <!-- END TWO EVENT -->
-<!-- jQuery-->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<!-- Everything else below -->
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/bootstrap-table.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/locale/bootstrap-table-zh-CN.min.js"></script>
+
+{% endblock %}
+
+{% block footer_scripts %}
 
     <script src="{% static 'alpacastats/js/bootstrap.min.js' %}"></script>
     <script>
@@ -118,5 +100,5 @@
             }]
         });
     </script>
-</body>
-</html>
+
+{% endblock %}
