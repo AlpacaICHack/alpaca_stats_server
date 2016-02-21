@@ -1,5 +1,9 @@
 import urllib, json
+
+import datetime
+
 from django.http import HttpResponse
+from django.utils import timezone
 from ..models import Event, Track, Movement, Vote
 
 
@@ -255,6 +259,27 @@ def add_request(request):
         return HttpResponse(json.dumps([track.name, track.artist, track.art]), content_type=json)
 
 
+def movement_data(request):
+    event_id_response = request.GET.get('event')
 
+    if event_id_response is not None:
+        event = Event.objects.get(pk=int(event_id_response))
 
+        tracks = Track.objects.filter(event__pk=event.pk).filter(active_track=True)
 
+        if len(tracks) > 0:
+            track = tracks[0]
+
+            moves = Movement.objects.filter(track__pk=track.pk).order_by('-timestamp').filter(timestamp__gt=timezone.now() - datetime.timedelta(0, 2))
+
+            print timezone.now() + datetime.timedelta(0, 60)
+
+            movesum = 0
+
+            for m in moves:
+                print m.timestamp
+                movesum += m.value
+
+            outsum = json.dumps({'movement': movesum})
+
+            return HttpResponse(outsum, content_type=json)

@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^api/vote$', apis.vote, name='vote_api'),
     url(r'^api/add_request$', apis.add_request, name='requests_api'),
     url(r'^api/current_track$', apis.current_track, name='current_track'),
+    url(r'^api/movement_data$', apis.movement_data, name='movement_data'),
 ]
