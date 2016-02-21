@@ -10,10 +10,10 @@ class TrackAdmin(admin.ModelAdmin):
     list_display = ('event', 'name', 'artist', 'art', 'active_track', 'track_type')
 
 class MovementAdmin(admin.ModelAdmin):
-    list_display = ('value', 'track')
+    list_display = ('value', 'track', 'timestamp')
 
 class VoteAdmin(admin.ModelAdmin):
-    list_display = ('user', 'track', 'vote')
+    list_display = ('user', 'track', 'vote', 'timestamp')
 
 admin.site.register(Event, EventAdmin)
 admin.site.register(Track, TrackAdmin)

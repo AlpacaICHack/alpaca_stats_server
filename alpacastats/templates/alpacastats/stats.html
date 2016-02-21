@@ -1,33 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head-->
-    {% load staticfiles %}
-    <title>Alpaca</title>
-    <!-- Bootstrap -->
-    <link href="{% static 'alpacastats/css/bootstrap.css' %}" rel="stylesheet">
-    <!-- Other -->
-    <link href='https://fonts.googleapis.com/css?family=Raleway:400,500,700,600,800,900' rel='stylesheet' type='text/css'>
-    <link href="{% static 'alpacastats/css/style.css' %}" rel="stylesheet">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/bootstrap-table.min.css">
-</head>
-<body>
+{% extends 'alpacastats/base.html' %}
+
+{% load staticfiles %}
+
+{% block navbar %}
 <header>
     <nav class="navbar navbar-inverse navbar-static-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
                 <p class="logo-type">Alpaca</p>
             </a>
-            <div class="navbar-left sumting">
-                <audio controls>
-                    <source src="http://www.w3schools.com/html/horse.ogg" type="audio/ogg" />
-                    <source src="http://www.w3schools.com/html/horse.mp3" type="audio/mpeg" />
-                </audio>
-            </div>
-            <p class="navbar-text navbar-left audiotext">Netsky - Somebody to Love (ft. Sia)  |  16 <span class="glyphicon glyphicon-arrow-up"></span> and 10 <span class="glyphicon glyphicon-arrow-down"></span></p>
+            {% if currenttrack %}
+            <p class="navbar-text navbar-left audiotext">{{ currenttrack.name }} - {{ currenttrack.artist }}  |  16 <span class="glyphicon glyphicon-arrow-up"></span> and 10 <span class="glyphicon glyphicon-arrow-down"></span></p>
+            {% endif %}
             <a class="navbar-right get-started">
                 <p class="navbar-text">Current</p>
             </a>
@@ -37,12 +21,15 @@
         </div>
     </nav>
 </header>
-<!-- ONE EVENT -->
+{% endblock %}
+
+
+{% block content %}
 <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-8">
         <div class="panel panel-primary event">
-            <div class="panel-heading">Current song being played</div>
+            <div class="panel-heading">Current song: {{ currenttrack.name }}</div>
             <div class="panel-body">
                 <div id="stats" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
             </div>
@@ -50,8 +37,21 @@
     </div>
     <div class="col-md-2"></div>
 </div>
-<!-- END ONE EVENT -->
-<!-- TWO EVENT -->
+
+<div class="row">
+    <div class="col-md-2">
+    </div>
+    <div class="col-md-8">
+        <div class="panel panel-primary event">
+            <div class="panel-heading">Current song: {{ currenttrack.name }}</div>
+            <div class="panel-body">
+                <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2"></div>
+</div>
+
 <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-8">
@@ -64,32 +64,18 @@
     </div>
     <div class="col-md-2"></div>
 </div>
-<!-- END TWO EVENT -->
-<!-- TWO EVENT -->
-<div class="row">
-    <div class="col-md-2">
-    </div>
-    <div class="col-md-8">
-        <div class="panel panel-primary event">
-            <div class="panel-heading">Current song being played</div>
-            <div class="panel-body">
-                <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-2"></div>
-</div>
-<!-- END TWO EVENT -->
+
+{% endblock %}
+
+
 <!-- jQuery-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <!-- Everything else below -->
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/bootstrap-table.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/locale/bootstrap-table-zh-CN.min.js"></script>
+
+{% block footer_scripts %}
+
 <script src="{% static 'alpacastats/js/audio.js' %}"></script>
 
-<script src="{% static 'alpacastats/js/bootstrap.min.js' %}"></script>
 <script>
     $(function () {
         $('#stats').highcharts({
@@ -224,5 +210,5 @@
         });
     });
 </script>
-</body>
-</html>
+
+{% endblock %}}

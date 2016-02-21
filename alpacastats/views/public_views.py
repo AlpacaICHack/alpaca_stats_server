@@ -24,4 +24,14 @@ def pool(request, event_id):
 
 
 def statistics(request, event_id):
-    return render(request, 'alpacastats/stats.html')
+    event = Event.objects.get(pk=event_id)
+
+    activetracks = Track.objects.filter(event__pk=event.pk).filter(active_track=True)
+    if len(activetracks) > 0:
+        currenttrack = activetracks[0]
+    else:
+        currenttrack = None
+
+    context = {'currenttrack': currenttrack}
+
+    return render(request, 'alpacastats/stats.html', context)
