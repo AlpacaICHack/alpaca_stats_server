@@ -236,7 +236,8 @@ def add_request(request):
                 search_artist += "+"
                 search_artist += s
 
-        url = "http://ws.audioscrobbler.com/2.0/?method=track.search&track=" + search_track + "&artist=" + search_artist + "&api_key=57ee3318536b23ee81d6b27e36997cde&format=json"
+        url = "http://ws.audioscrobbler.com/2.0/?method=track.search&track=" + search_track + "&artist=" +\
+              search_artist + "&api_key=57ee3318536b23ee81d6b27e36997cde&format=json"
         response = urllib.urlopen(url)
         data = json.loads(response.read())
 
@@ -256,7 +257,7 @@ def add_request(request):
 
         track.save()
 
-        return HttpResponse(json.dumps([track.name, track.artist, track.art]), content_type=json)
+    return HttpResponse(json.dumps([track.name, track.artist, track.art]), content_type=json)
 
 
 def movement_data(request):
