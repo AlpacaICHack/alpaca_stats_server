@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 
-from ..forms import SearchForm
+from ..forms import SearchForm, EventForm
 from ..models import Event, Track
 
 
@@ -80,6 +80,8 @@ def pool(request, event_id):
         return render(request, 'alpacastats/pools.html', context)
 
 
+
+
 def statistics(request, event_id):
     event = Event.objects.get(pk=event_id)
 
@@ -92,3 +94,23 @@ def statistics(request, event_id):
     context = {'currenttrack': currenttrack, 'event': event}
 
     return render(request, 'alpacastats/stats.html', context)
+
+
+def event(request):
+    #event = Event.objects.get(pk=event_id)
+
+    #context = {'event': event}
+
+    if request.method == 'POST':
+        form = EventForm(request.POST)
+        if form.is_valid():
+
+            event = Event()
+            event.date = form.cleaned_data['date']
+            event.description = form.cleaned_data['description']
+            event.picture = form.cleaned_data['image_url']
+
+            event.save()
+            return HttpResponseRedirect(reverse('alpacastats:home'))
+    else:
+        return render(request, 'alpacastats/new_event.html')

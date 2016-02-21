@@ -3,24 +3,7 @@
 {% load staticfiles %}
 
 {% block navbar %}
-<header>
-    <nav class="navbar navbar-inverse navbar-static-top">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <p class="logo-type">Alpaca</p>
-            </a>
-            {% if currenttrack %}
-            <p class="navbar-text navbar-left audiotext">{{ currenttrack.name }} - {{ currenttrack.artist }}  |  16 <span class="glyphicon glyphicon-arrow-up"></span> and 10 <span class="glyphicon glyphicon-arrow-down"></span></p>
-            {% endif %}
-            <a class="navbar-right get-started">
-                <p class="navbar-text">Current</p>
-            </a>
-            <a class="navbar-right get-started">
-                <p class="navbar-text">Pool</p>
-            </a>
-        </div>
-    </nav>
-</header>
+{% include 'alpacastats/navbar.html' %}
 {% endblock %}
 
 

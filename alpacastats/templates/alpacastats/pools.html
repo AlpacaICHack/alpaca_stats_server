@@ -3,21 +3,7 @@
 {% load staticfiles %}
 
 {% block navbar %}
-    <header>
-        <nav class="navbar navbar-inverse navbar-static-top">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">
-                    <p class="logo-type">Alpaca</p>
-                </a>
-                <a class="navbar-right get-started">
-                    <p class="navbar-text">Current</p>
-                </a>
-                <a class="navbar-right get-started">
-                    <p class="navbar-text">Pool</p>
-                </a>
-            </div>
-        </nav>
-    </header>
+{% include 'alpacastats/navbar.html' %}
 {% endblock %}
 
 {% block content %}
@@ -63,7 +49,21 @@
             <div class="panel panel-primary event">
                 <div class="panel-heading">Pool</div>
                 <div class="panel-body">
-                    <table id="table"></table>
+                    <table id="table">
+                    <thead>
+                        <tr>
+                            <th data-field="track_name">Track Name</th>
+                            <th data-field="artist">Artist</th>
+                            <th data-field="up-down">Up/down votes</th>
+                            <th data-field="type">Track type</th>
+                        </tr>
+                    </thead>
+
+
+
+
+
+                    </table>
                 </div>
             </div>
         </div>
@@ -76,43 +76,12 @@
 
     <script src="{% static 'alpacastats/js/bootstrap.min.js' %}"></script>
     <script>
+        $(document).ready(function(){
         $('#table').bootstrapTable({
-            columns: [{
-                field: 'id',
-                title: 'Something'
-            }, {
-                field: 'name',
-                title: 'Song Name'
-            }, {
-                field: 'price',
-                title: 'Upvotes/Downvotes'
-            }],
-            data: [{
-                id: 1,
-                name: 'Badzu - Let\'s Have a Party',
-                price: '26/125'
-            }, {
-                id: 2,
-                name: 'Shakira - Waka Waka',
-                price: '14/65'
-            }, {
-                id: 3,
-                name: 'Item 2',
-                price: '75/256'
-            }, {
-                id: 4,
-                name: 'Item 2',
-                price: '1337/69'
-            }, {
-                id: 3,
-                name: 'Item 2',
-                price: '25/12'
-            }, {
-                id: 4,
-                name: 'Item 2',
-                price: '0/1'
-            }]
+           data:{{data|safe}}
         });
+    });
+
     </script>
 
 {% endblock %}

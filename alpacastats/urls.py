@@ -4,6 +4,7 @@ from views import apis, public_views
 
 urlpatterns = [
     url(r'^$', public_views.home, name='index'),
+    url(r'^event$', public_views.event, name='new_event'),
     url(r'^pool/(?P<event_id>[0-9]+)$', public_views.pool, name='pool'),
     url(r'^statistics/(?P<event_id>[0-9]+)$', public_views.statistics, name='statistics'),
     url(r'^api/events$', apis.events, name='events_api'),
