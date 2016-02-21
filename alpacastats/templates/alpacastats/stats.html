@@ -184,8 +184,8 @@
 }());
 
     var dt = dynamicTable.config('pool',
-                                 ['name', 'artist', 'up', 'down', 'play'],
-                                 ['Name', 'Artist', 'Likes', 'Dislikes', 'Play Track'], //set to null for field names instead of custom header names
+                                 ['name', 'artist', 'up', 'down', 'type', 'play'],
+                                 ['Name', 'Artist', 'Likes', 'Dislikes', 'Origin','Play Track'], //set to null for field names instead of custom header names
                                  'There are no songs in the pool - try adding some!');
     function requestPoolData() {
         $.ajax({

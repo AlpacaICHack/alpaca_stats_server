@@ -333,10 +333,15 @@ def tracks_data(request):
             else:
                 play = '<a href="' + reverse('alpacastats:statistics', args=[event.id]) + '?track_id=' + str(t.id) + '"><button class="btn btn-primary btn-block">Play Track <span class="glyphicon glyphicon-play"></button></a>'
 
+            if t.track_type == 'DJ':
+                type = 'Pool'
+            else:
+                type = 'Request'
 
             trackslist.append({
                 'name': t.name,
                 'artist': t.artist,
+                'type': type,
                 'up': v['up'],
                 'down': v['down'],
                 'play': play
