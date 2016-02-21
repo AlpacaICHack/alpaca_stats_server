@@ -67,7 +67,20 @@
     <div class="col-md-2"></div>
     <div class="col-md-8">
         <div class="panel panel-primary event">
-            <div class="panel-heading">Current song being played</div>
+            <div class="panel-heading">Total Movement</div>
+            <div class="panel-body">
+                <div id="move-total" style="min-width: 310px; height: 300px; margin: 0 auto"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2"></div>
+</div>
+
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <div class="panel panel-primary event">
+            <div class="panel-heading">Song Pool</div>
             <div class="panel-body">
                 <table id="pool" class="table table-hover"></table>
             </div>
@@ -193,6 +206,86 @@
 </script>
 
 <script>
+
+    $(function () {
+    $('#move-total').highcharts({
+        chart: {
+            type: 'scatter',
+            zoomType: 'xy',
+            events: {
+                        load: function () {
+
+                            // set up the updating of the chart each second
+                            var series = this.series[0];
+
+                            setInterval(function () {
+
+                                $.ajax({
+                                    url: '{% url 'alpacastats:scatter' %}?event={{ event.id }}',
+                                    success: function(response) {
+                                        series.setData(response)
+                                    },
+                                    cache: false
+                                });
+                            }, 3000);
+                        }
+                    }
+        },
+        title: {
+            text: ' '
+        },
+        credits: {
+            enabled: false
+        },
+        xAxis: {
+            title: {
+                enabled: false
+            },
+            startOnTick: true,
+            endOnTick: true,
+            showLastLabel: true
+        },
+        yAxis: {
+            title: {
+                enabled: false
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        plotOptions: {
+            scatter: {
+                marker: {
+                    radius: 5,
+                    states: {
+                        hover: {
+                            enabled: true,
+                            lineColor: 'rgb(100,100,100)'
+                        }
+                    }
+                },
+                states: {
+                    hover: {
+                        marker: {
+                            enabled: false
+                        }
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<b>{series.name}</b><br>',
+                    pointFormat: 'Time: {point.x}, Movement: {point.y}'
+                }
+            }
+        },
+        series: [{
+            name: 'Movement',
+            color: 'rgba(1, 22, 39, 0.58)',
+            data: []
+        },]
+    });
+});
+
+
     $(function () {
         $(document).ready(function () {
             Highcharts.setOptions({

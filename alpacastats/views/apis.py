@@ -341,3 +341,20 @@ def tracks_data(request):
         tracksjson = json.dumps({'tracks': trackslist})
 
         return HttpResponse(tracksjson, content_type=json)
+
+def scatter(request):
+    event_id_response = request.GET.get('event')
+
+    if event_id_response is not None:
+        event = Event.objects.get(pk=int(event_id_response))
+
+        allmovement = Movement.objects.filter(track__event__pk=event.pk);
+
+        scatterdata = []
+
+        for m in allmovement:
+            scatterdata.append([int(m.timestamp.strftime("%H%M%S")), m.value])
+
+        scatterjson = json.dumps(scatterdata)
+
+        return HttpResponse(scatterjson, content_type=json)
