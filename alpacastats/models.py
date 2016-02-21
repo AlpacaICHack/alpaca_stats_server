@@ -24,6 +24,8 @@ class Track(models.Model):
 
     timestamp = models.DateTimeField(auto_now=True)
 
+    played = models.BooleanField()
+
     DJ = 'DJ'
     REQUEST = 'R'
     TRACK_TYPES = (
