@@ -85,21 +85,25 @@ def current_track(request):
         except Event.DoesNotExist:
             return HttpResponse("Event doesn't exist", content_type=json)
 
-        t = Track.objects.filter(event__pk=event.pk).filter(active_track=True)[0]
+        tracks = Track.objects.filter(event__pk=event.pk).filter(active_track=True)
+        if len(tracks) > 0:
+            t = tracks[0]
 
-        track = {}
-        track['id'] = t.pk
-        track['name'] = t.name
-        track['artist'] = t.artist
-        track['artwork'] = t.art
-        if t.track_type == 'DJ':
-            track['request'] = False
+            track = {}
+            track['id'] = t.pk
+            track['name'] = t.name
+            track['artist'] = t.artist
+            track['artwork'] = t.art
+            if t.track_type == 'DJ':
+                track['request'] = False
+            else:
+                track['request'] = True
+
+            track_out = json.dumps(track)
+
+            return HttpResponse(track_out, content_type=json)
         else:
-            track['request'] = True
-
-        track_out = json.dumps(track)
-
-        return HttpResponse(track_out, content_type=json)
+            return HttpResponse({}, content_type=json)
 
 
 def vote_track(request):
