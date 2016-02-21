@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 
 from ..forms import SearchForm
-from ..models import Event, Track
+from ..models import Event, Track, Vote, Movement
 
 
 # Create your views here.
