@@ -284,3 +284,23 @@ def movement_data(request):
             outsum = json.dumps({'movement': movesum})
 
             return HttpResponse(outsum, content_type=json)
+
+def votes_data(request):
+    event_id_response = request.GET.get('event')
+
+    if event_id_response is not None:
+        event = Event.objects.get(pk=int(event_id_response))
+
+        tracks = Track.objects.filter(event__pk=event.pk).filter(active_track=True)
+
+        if len(tracks) > 0:
+            track = tracks[0]
+
+            upvotes = Vote.objects.filter(track__pk=track.pk).filter(vote='U').count()
+            downvotes = Vote.objects.filter(track__pk=track.pk).filter(vote='D').count()
+
+            outvotes = json.dumps({'upvotes': upvotes, 'downvotes': downvotes})
+
+            return HttpResponse(outvotes, content_type=json)
+
+
