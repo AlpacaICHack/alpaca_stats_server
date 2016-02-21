@@ -7,7 +7,7 @@ class EventAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', 'date', 'picture')
 
 class TrackAdmin(admin.ModelAdmin):
-    list_display = ('event', 'name', 'artist', 'art', 'active_track', 'track_type')
+    list_display = ('event', 'name', 'artist', 'art', 'active_track', 'track_type', 'played')
 
 class MovementAdmin(admin.ModelAdmin):
     list_display = ('value', 'track', 'timestamp')

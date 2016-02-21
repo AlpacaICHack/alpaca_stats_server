@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 
 from ..forms import SearchForm, EventForm
-from ..models import Event, Track
+from ..models import Event, Track, Vote, Movement
 
 
 # Create your views here.
@@ -73,6 +73,7 @@ def pool(request, event_id):
             track.track_type = 'DJ'
             track.active_track = False
             track.event = Event.objects.get(pk=event_id)
+            track.played = False
 
             track.save()
             return HttpResponseRedirect(reverse('alpacastats:pool', args=[event_id]))
@@ -83,7 +84,29 @@ def pool(request, event_id):
 
 
 def statistics(request, event_id):
+
     event = Event.objects.get(pk=event_id)
+
+    track_id_response = request.GET.get('track_id')
+    if track_id_response is not None:
+        newactive = Track.objects.get(pk=int(track_id_response))
+        activetracks = Track.objects.filter(event__pk=event.pk).filter(active_track=True)
+        if len(activetracks) > 0:
+            for t in activetracks:
+                t.active_track = False
+                t.played = True
+                t.save()
+
+        newactive.active_track = True
+        newactive.save()
+
+    alltracks = Track.objects.filter(event__pk=event.pk)
+    votes = []
+
+    for t in alltracks:
+        up = Vote.objects.filter(track__pk=t.pk).filter(vote='U').count()
+        down = Vote.objects.filter(track__pk=t.pk).filter(vote='D').count()
+        votes.append({'up': up, 'down': down})
 
     activetracks = Track.objects.filter(event__pk=event.pk).filter(active_track=True)
     if len(activetracks) > 0:
@@ -91,7 +114,9 @@ def statistics(request, event_id):
     else:
         currenttrack = None
 
-    context = {'currenttrack': currenttrack, 'event': event}
+
+
+    context = {'currenttrack': currenttrack, 'event': event, 'tracks': zip(alltracks, votes)}
 
     return render(request, 'alpacastats/stats.html', context)
 

@@ -2,6 +2,7 @@ import urllib, json
 
 import datetime
 
+from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.utils import timezone
 from ..models import Event, Track, Movement, Vote
@@ -241,7 +242,6 @@ def add_request(request):
         response = urllib.urlopen(url)
         data = json.loads(response.read())
 
-        print url
 
         art_url = data['results']['trackmatches']['track'][-1]['image'][3]['#text']
         name = data['results']['trackmatches']['track'][0]['name']
@@ -254,6 +254,7 @@ def add_request(request):
         track.track_type = 'R'
         track.active_track = False
         track.event = Event.objects.get(pk=event_id)
+        track.played = False
 
         track.save()
 
@@ -271,19 +272,18 @@ def movement_data(request):
         if len(tracks) > 0:
             track = tracks[0]
 
-            moves = Movement.objects.filter(track__pk=track.pk).order_by('-timestamp').filter(timestamp__gt=timezone.now() - datetime.timedelta(0, 2))
-
-            print timezone.now() + datetime.timedelta(0, 60)
+            moves = Movement.objects.filter(track__pk=track.pk).order_by('-timestamp').filter(
+                timestamp__gt=timezone.now() - datetime.timedelta(0, 2))
 
             movesum = 0
 
             for m in moves:
-                print m.timestamp
                 movesum += m.value
 
             outsum = json.dumps({'movement': movesum})
 
             return HttpResponse(outsum, content_type=json)
+
 
 def votes_data(request):
     event_id_response = request.GET.get('event')
@@ -304,3 +304,40 @@ def votes_data(request):
             return HttpResponse(outvotes, content_type=json)
 
 
+def tracks_data(request):
+    event_id_response = request.GET.get('event')
+
+    if event_id_response is not None:
+        event = Event.objects.get(pk=int(event_id_response))
+
+        alltracks = Track.objects.filter(event__pk=event.pk)
+        votes = []
+        for t in alltracks:
+            up = Vote.objects.filter(track__pk=t.pk).filter(vote='U').count()
+            down = Vote.objects.filter(track__pk=t.pk).filter(vote='D').count()
+            votes.append({'up': up, 'down': down})
+
+        trackslist = []
+
+        ziptracks = zip(alltracks, votes)
+        sortedtracks = sorted(ziptracks, key=lambda x: x[1]['up'], reverse=True)
+        for t, v in sortedtracks:
+            if t.played:
+                play = '<button class="btn btn-warning btn-block">Played!</button>'
+            elif t.active_track:
+                play = '<button class="btn btn-danger btn-block">Currently playing</button>'
+            else:
+                play = '<a href="' + reverse('alpacastats:statistics', args=[event.id]) + '?track_id=' + str(t.id) + '"><button class="btn btn-primary btn-block">Play Track <span class="glyphicon glyphicon-play"></button></a>'
+
+
+            trackslist.append({
+                'name': t.name,
+                'artist': t.artist,
+                'up': v['up'],
+                'down': v['down'],
+                'play': play
+            })
+
+        tracksjson = json.dumps({'tracks': trackslist})
+
+        return HttpResponse(tracksjson, content_type=json)
