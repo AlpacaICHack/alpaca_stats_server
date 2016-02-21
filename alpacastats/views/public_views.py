@@ -17,3 +17,11 @@ def home(request):
 
     context = {'events': zip(events, currenttracks)}
     return render(request, 'alpacastats/home.html', context)
+
+
+def pool(request):
+    pass
+
+
+def statistics(request):
+    pass
