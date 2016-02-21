@@ -6,7 +6,7 @@
 <header>
     <nav class="navbar navbar-inverse navbar-static-top">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'alpacastats:home' %}">
+            <a class="navbar-brand" href="{% url 'alpacastats:index' %}">
                 <p class="logo-type">Alpaca</p>
             </a>
 
@@ -19,12 +19,14 @@
         </div>
     </nav>
 </header>
+{% endblock %}
+
 {% block content %}
     <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-8">
             <div class="panel panel-primary event">
-                <div class="panel-heading">Search through pool</div>
+                <div class="panel-heading">Add a song to your pool</div>
                 <div class="panel-body bdypadding">
                     <form action="{% url 'alpacastats:pool' event.id %}" method="post">
                         {% csrf_token %}
@@ -62,25 +64,7 @@
             <div class="panel panel-primary event">
                 <div class="panel-heading">Pool</div>
                 <div class="panel-body">
-<<<<<<< HEAD
-                    <table id="table">
-                    <thead>
-                        <tr>
-                            <th data-field="track_name">Track Name</th>
-                            <th data-field="artist">Artist</th>
-                            <th data-field="up-down">Up/down votes</th>
-                            <th data-field="type">Track type</th>
-                        </tr>
-                    </thead>
-
-
-
-
-
-                    </table>
-=======
                     <table id="table" class="table table-hover"></table>
->>>>>>> d71e1318fe880d97be5a436e87b85444ac116e21
                 </div>
             </div>
         </div>
@@ -92,15 +76,7 @@
 {% block footer_scripts %}
 
     <script>
-<<<<<<< HEAD
-        $(document).ready(function(){
-        $('#table').bootstrapTable({
-           data:{{data|safe}}
-        });
-    });
 
-    </script>
-=======
     var dynamicTable = (function() {
 
     var _tableId, _table,
@@ -205,7 +181,6 @@
     }
 
     requestPoolData();
->>>>>>> d71e1318fe880d97be5a436e87b85444ac116e21
 
 </script>
 {% endblock %}

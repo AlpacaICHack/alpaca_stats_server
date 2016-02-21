@@ -46,15 +46,15 @@ def pool(request, event_id):
                     search_track += "+"
                     search_track += s
 
-                search_artist = ""
-                first = True
-                for s in str.split(str(form.cleaned_data['artist_name'])):
-                    if first:
-                       search_artist += s
-                       first = False
-                    else:
-                        search_artist += "+"
-                        search_artist += s
+            search_artist = ""
+            first = True
+            for s in str.split(str(form.cleaned_data['artist_name'])):
+                if first:
+                   search_artist += s
+                   first = False
+                else:
+                    search_artist += "+"
+                    search_artist += s
 
             url = "http://ws.audioscrobbler.com/2.0/?method=track.search&track=" + search_track + "&artist=" \
                   + search_artist + "&api_key=57ee3318536b23ee81d6b27e36997cde&format=json"
@@ -78,7 +78,7 @@ def pool(request, event_id):
             track.save()
             return HttpResponseRedirect(reverse('alpacastats:pool', args=[event_id]))
     else:
-        return render(request, 'alpacastats/pools.html', context)
+        return render(request, 'alpacastats/pool.html', context)
 
 
 
@@ -131,11 +131,12 @@ def event(request):
         if form.is_valid():
 
             event = Event()
+            event.name = form.cleaned_data['event_title']
             event.date = form.cleaned_data['date']
             event.description = form.cleaned_data['description']
             event.picture = form.cleaned_data['image_url']
 
             event.save()
-            return HttpResponseRedirect(reverse('alpacastats:home'))
+            return HttpResponseRedirect(reverse('alpacastats:pool', args=[event.id]))
     else:
         return render(request, 'alpacastats/new_event.html')
